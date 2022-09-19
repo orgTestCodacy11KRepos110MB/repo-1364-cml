@@ -305,8 +305,17 @@ const runLocal = async (opts) => {
         shutdown({ ...opts, reason: `timeout:${idleTimeout}` });
         clearInterval(watcher);
       }
-
-      RUNNER_TIMER = idle ? RUNNER_TIMER + 1 : 0;
+      if (idle) {
+        RUNNER_TIMER += 1;
+        winston.info(
+          `Runner idling... shutdown in: ${idleTimeout - RUNNER_TIMER} seconds`
+        );
+      } else {
+        if (RUNNER_TIMER !== 0) {
+          winston.info(`Idle timeout reset.`);
+        }
+        RUNNER_TIMER = 0;
+      }
     }, 1000);
   }
 
