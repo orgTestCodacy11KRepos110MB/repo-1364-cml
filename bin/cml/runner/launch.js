@@ -77,6 +77,7 @@ const shutdown = async (opts) => {
   };
 
   if (!cloud) {
+    winston.info(opts);
     try {
       await unregisterRunner();
       await retryWorkflows();
