@@ -284,6 +284,14 @@ const runLocal = async (opts) => {
 
   proc.stderr.on('data', dataHandler);
   proc.stdout.on('data', dataHandler);
+
+  proc.stdout.on('data', (data) => {
+    winston.info(`Runner Logs: ${data.toString('utf8')}`);
+  });
+  proc.stderr.on('data', (data) => {
+    winston.info(`Runner Logs: ${data.toString('utf8')}`);
+  });
+
   proc.on('disconnect', () =>
     shutdown({ ...opts, error: new Error('runner proccess lost') })
   );
