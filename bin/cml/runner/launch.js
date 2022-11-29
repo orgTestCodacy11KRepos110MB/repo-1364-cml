@@ -61,13 +61,13 @@ const shutdown = async (opts) => {
     winston.info(`Waiting ${destroyDelay} seconds to destroy`);
     await sleep(destroyDelay);
 
-    const { cloud, id, region } = JSON.parse(
+    const { cloud, id, region, name } = JSON.parse(
       Buffer.from(tfResource, 'base64').toString('utf-8')
     ).instances[0].attributes;
 
     try {
       return await exec(
-        `leo destroy-runner --cloud=${cloud} --region=${region} ${id}`
+        `leo destroy-runner --cloud=${cloud} --region=${region} ${name || id}`
       );
     } catch (err) {
       winston.error(`\tFailed destroying with LEO: ${err.message}`);
